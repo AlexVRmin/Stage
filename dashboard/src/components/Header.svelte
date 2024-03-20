@@ -19,7 +19,7 @@ function closeNav() {
             </svg>
         </button>
 
-        <img src="src/lib/Images/Logo.png" alt="Logo" class="w-10 absolute left-20">
+        <img src="../src/lib/Images/Logo.png" alt="Logo" class="w-10 absolute left-20">
     </div>
 
         <div id="myNav" class="overlay">

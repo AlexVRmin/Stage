@@ -1,6 +1,94 @@
 <script>
   import Header from "../components/Header.svelte";
+  import { writable, get } from 'svelte/store';
+
+  // Volgorde van sortering zetten
+  // @ts-ignore
   export let data;
+  let scholen = writable([...data.School]);
+  let zoekterm = '';
+  let sortVolgorde = {
+    Naam: 1,
+    Stad: 1,
+    Admin: 1,
+    Schoolgroep: 1,
+    Master: 1
+  };
+
+  $: sckool = $scholen;
+
+  // Volgorde van sortering aanpassen
+  // @ts-ignore
+  function volgorde(veld) {
+    // @ts-ignore
+    sortVolgorde[veld] *= -1;
+    // @ts-ignore
+    return sortVolgorde[veld];
+  }
+
+  // Sorteren
+  // @ts-ignore
+  function sorteren(veld, vergelijkFunctie) {
+    scholen.update(sckolen => [...sckolen].sort(vergelijkFunctie));
+  }
+
+  // Per catergorie sorteren
+  function Naam() {
+    const sortVolgorde = volgorde('Naam');
+    // @ts-ignore
+    sorteren('Naam', (a, b) => a.Naam.localeCompare(b.Naam) * sortVolgorde);
+  }
+
+  function Stad() {
+    const sortVolgorde = volgorde('Stad');
+    // @ts-ignore
+    sorteren('Stad', (a, b) => a.Stad.localeCompare(b.Stad) * sortVolgorde);
+  }
+
+  function Admin() {
+    const sortVolgorde = volgorde('Admin');
+    // @ts-ignore
+    sorteren('Admin', (a, b) => a.Admin.localeCompare(b.Admin) * sortVolgorde);
+  }
+
+  function Groep() {
+    const sortVolgorde = volgorde('Schoolgroep');
+    // @ts-ignore
+    sorteren('Schoolgroep', (a, b) => (a.Schoolgroep ?? '').localeCompare(b.Schoolgroep ?? '') * sortVolgorde);
+  }
+
+  function Master() {
+    const sortVolgorde = volgorde('Master');
+    // @ts-ignore
+    sorteren('Master', (a, b) => (a.Master - b.Master) * sortVolgorde);
+  }
+
+  // Searchbar
+  function zoekKlanten() {
+    const dataArray = get(writable([...data.School]));
+    const filteredData = dataArray.filter(school => 
+      school.Naam.toLowerCase().includes(zoekterm.toLowerCase()) ||
+      school.Stad.toLowerCase().includes(zoekterm.toLowerCase()) ||
+      school.Admin.toLowerCase().includes(zoekterm.toLowerCase()) ||
+      (school.Schoolgroep && school.Schoolgroep.toLowerCase().includes(zoekterm.toLowerCase())) ||
+      school.Master.toString().includes(zoekterm)
+    );
+
+    scholen.set(filteredData);
+  }
+
+  // Updater voor Searchbar
+  // @ts-ignore
+  function handleSearch(event) {
+    zoekterm = event.target.value.trim();
+    zoekKlanten();
+
+    //Reset als er niks staat
+    if (zoekterm === '') {
+      scholen.set(data.School);
+    }
+  }
+
 </script>
 
 <Header/>
@@ -20,7 +108,7 @@
 
         </span>
 
-        <input class="search-input" type="search" placeholder="Search ...">
+        <input class="search-input" type="search" placeholder="Search ..." on:input={handleSearch}>
 
       </div>
 
@@ -47,36 +135,42 @@
 
   <section class="border-solid border-2 border-gray-500 rounded-lg flex px-12 mb-8">
 
-    <span class="w-48">Name</span>
+    <span class="w-48 cursor-pointer" on:click={Naam}>Name</span>
     <span class="w-52">Adress</span>
     <span class="w-24">PC</span>
-    <span class="w-24">City</span>
-    <span class="w-40">Primary</span>
-    <span class="w-72">Primary email</span>
-    <span class="w-48">Technical</span>
-    <span class="w-72">Technical email</span>
+    <span class="w-20 cursor-pointer" on:click={Stad}>City</span>
+    <span class="w-40 cursor-pointer" on:click={Admin}>Primary</span>
+    <span class="w-60">Primary email</span>
+    <span class="w-48 cursor-pointer" on:click={Master}>Master</span>
+    <span class="w-72 cursor-pointer" on:click={Groep}>Schoolgroep</span>
     <span class="w-40">Phone</span>
 
   </section>
 
-
-  {#each data.School as School}
+  {#each sckool as school}
     <div class="record">
-      
-        <span class="w-48">Sancta Maria Leuven</span>
-        <span class="w-52">Avenue de la source {School.Huisnummer}</span>
-        <span class="w-24">3000</span>
-        <span class="w-24">Leuven</span>
-        <span class="w-40">Jos d'hooge</span>
-        <span class="w-72">Jos@wiebel.be</span>
-        <span class="w-48">Jan Vanwalleghem</span>
-        <span class="w-72">gill.vandenbroeck@min.ksleuven.be</span>
-        <span class="w-40">+32 471 87 26 50</span>
-      
-      <button class="px-4 py-0.5 bg-edutech-orange rounded-2xl">View</button>
+      <span class="w-48">{school.Naam}</span>
+      <span class="w-52">{school.Huisnummer}</span>
+      <span class="w-20">{school.Postcode}</span>
+      <span class="w-24">{school.Stad}</span>
+      <span class="w-40">{school.Voornaam} {school.Admin}</span>
+      <span class="w-64">{school.Email}</span>
+      <!--Master bepalen-->
+      {#if school.Master == 1}
+        <span class="w-48">5799353</span>
+      {:else}
+        <span class="w-48">8135865</span>
+      {/if}
+      <!--Zien of er een schoolgroep is of niet-->
+      {#if school.Schoolgroep}
+        <span class="w-72">{school.Schoolgroep}</span>
+      {:else}
+        <span class="w-72">Geen Schoolgroep</span>
+      {/if}
+      <span class="w-40">+32 471 87 26 50</span>
+      <a class="px-4 py-0.5 bg-edutech-orange rounded-2xl" href={`/Single/${school.PKschool}`}>View</a>
     </div>
   {/each}
-
 </main>
 
   
