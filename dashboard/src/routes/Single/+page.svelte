@@ -27,12 +27,6 @@
       <h2 class="text-2xl pl-9">Contact</h2>
 
       <div class="bg-white px-9 py-4 flex flex-col gap-6">
-
-        <div>
-          <h3>Phone number</h3>
-          <span>+32 471 87 25 91</span>
-        </div>
-        
         <div>
           <h3>Primary (Signature)</h3>
           <span>Greet Cauwenberghs</span>
