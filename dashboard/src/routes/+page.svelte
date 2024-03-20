@@ -167,7 +167,6 @@
       {:else}
         <span class="w-72">Geen Schoolgroep</span>
       {/if}
-      <span class="w-40">+32 471 87 26 50</span>
       <a class="px-4 py-0.5 bg-edutech-orange rounded-2xl" href={`/Single/${school.PKschool}`}>View</a>
     </div>
   {/each}
