@@ -136,11 +136,8 @@
   <section class="border-solid border-2 border-gray-500 rounded-lg flex px-12 mb-8">
 
     <span class="w-48 cursor-pointer" on:click={Naam}>Name</span>
-    <span class="w-52">Adress</span>
-    <span class="w-24">PC</span>
     <span class="w-20 cursor-pointer" on:click={Stad}>City</span>
     <span class="w-40 cursor-pointer" on:click={Admin}>Primary</span>
-    <span class="w-60">Primary email</span>
     <span class="w-48 cursor-pointer" on:click={Master}>Master</span>
     <span class="w-72 cursor-pointer" on:click={Groep}>Schoolgroep</span>
     <span class="w-40">Phone</span>
@@ -150,11 +147,8 @@
   {#each sckool as school}
     <div class="record">
       <span class="w-48">{school.Naam}</span>
-      <span class="w-52">{school.Huisnummer}</span>
-      <span class="w-20">{school.Postcode}</span>
       <span class="w-24">{school.Stad}</span>
       <span class="w-40">{school.Voornaam} {school.Admin}</span>
-      <span class="w-64">{school.Email}</span>
       <!--Master bepalen-->
       {#if school.Master == 1}
         <span class="w-48">5799353</span>
