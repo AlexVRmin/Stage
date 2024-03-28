@@ -29,28 +29,28 @@
       <div class="bg-white px-9 py-4 flex flex-col gap-6">
 
         <div>
-          <h3>Phone number</h3>
-          <span>+32 471 87 25 91</span>
+          <h3 class="font-bold">Phone number</h3>
+          <span class="ml-1">+32 471 87 25 91</span>
         </div>
         
         <div>
-          <h3>Primary (Signature)</h3>
-          <span>Greet Cauwenberghs</span>
+          <h3 class="font-bold">Primary (Signature)</h3>
+          <span class="ml-1">Greet Cauwenberghs</span>
         </div>
 
         <div>
-          <h3>Primary Email</h3>
-          <span>greet.cauwenberghs@mis.ksleuven.be</span>
+          <h3 class="font-bold">Primary Email</h3>
+          <span class="ml-1">greet.cauwenberghs@mis.ksleuven.be</span>
         </div>
 
         <div>
-          <h3>Technical (Admin)</h3>
-          <span>Born vandegaer</span>
+          <h3 class="font-bold">Technical (Admin)</h3>
+          <span class="ml-1">Born vandegaer</span>
         </div>
 
         <div>
-          <h3>Technical Email</h3>
-          <span>bjorn.vandegaer@min.ksleuven.be</span>
+          <h3 class="font-bold">Technical Email</h3>
+          <span class="ml-1">bjorn.vandegaer@min.ksleuven.be</span>
         </div>
       </div>
 
@@ -61,6 +61,16 @@
       <h2 class="text-2xl">Contracts</h2>
 
       <div class="bg-white px-9 py-4">
+        <p class="record">test</p>
+        <p class="record">test</p>
+        <p class="record">test</p>  
+        <p class="record">test</p>
+        <p class="record">test</p>
+        <p class="record">test</p>  
+        <p class="record">test</p>
+        <p class="record">test</p>
+        <p class="record">test</p>  
+        <p class="record">test</p>
         <p class="record">test</p>
       </div>
 
