@@ -1,5 +1,34 @@
 <script>
   import Header from "../../components/Header.svelte"
+  import { writable, get } from 'svelte/store';
+
+  export let data;
+  let contracten = writable([...data.Contract]);  
+  let zoekterm = '';
+
+  // Searchbar
+  function zoekContracten() {
+    const dataArray = get(writable([...data.Contract]));
+    const filteredData = dataArray.filter(contract => 
+    contract.PCN.toLowerCase().includes(zoekterm.toLowerCase()) ||
+    contract.Startdatum.toLowerCase().includes(zoekterm.toLowerCase()) ||
+    contract.Gratislicenties.toLowerCase().includes(zoekterm)
+    );
+
+    contracten.set(filteredData);
+  }
+
+  // Updater voor Searchbar
+  // @ts-ignore
+  function handleSearch(event) {
+    zoekterm = event.target.value.trim();
+    zoekContracten();
+
+  //Reset als er niks staat
+  if (zoekterm === '') {
+    contracten.set(data.Contract);
+  }
+  }
 </script>
 
 <svelte:head>
@@ -44,31 +73,29 @@
 </div>
 
 <main class="m-9 flex flex-col gap-2">
+  <section class="border-solid flex border-2 border-gray-500 rounded-lg px-12 mb-8">
+    <span class="w-64">Status</span>
+    <span class="w-64">PCN</span>
+    <span class="w-56">Startdatum</span>
+    <span class="w-56">License amount</span>
+    <span class="w-56">Free licenses</span>
+    <span class="w-56">Total price</span>
+  </section>
 
-    <section class="border-solid flex border-2 border-gray-500 rounded-lg px-12 mb-8">
-        
-      <span class="w-64">Nummer</span>
-      <span class="w-64">Status</span>
-      <span class="w-64">PCN</span>
-      <span class="w-56">Startdate</span>
-      <span class="w-56">License amount</span>
-      <span class="w-56">Free licenses</span>
-      <span class="w-56">Total price</span>
-
-    </section>
-
-    <div class="record">
-
-        <span class="w-64">65014612</span>
-        <span class="w-64 active">ACTIVE</span>
-        <span class="w-64">658AH0021</span>
-        <span class="w-56">1 OCTOBER </span>
-        <span class="w-56">2</span>
-        <span class="w-56">100</span>
-        <span class="w-56">€ 7999</span>
-
-        <button class="px-4 py-0.5 bg-edutech-orange rounded-2xl">View</button>
-
-    </div>
+  {#each $contracten as contract}
+  <div class="record flex justify-between">
+    {#if contract.Startdatum > Date.now()}
+      <span class="w-40">ACTIVE</span>
+    {:else}
+      <span class="w-40">INACTIVE</span>
+    {/if}
+    <span class="w-40">{contract.PCN}</span>
+    <span class="w-40">{new Date(contract.Startdatum).toLocaleDateString()}</span>
+    <span class="w-40">{contract.Aantal}</span>
+    <span class="w-40">{contract.Gratislicenties}</span>
+    <span class="w-40">{contract.Prijs}</span>
+    <a class="px-4 py-0.5 bg-edutech-orange rounded-2xl" href={`/Licences/${contract.PKcontract}`}>View</a>
+  </div>
+  {/each}
 </main>
 
