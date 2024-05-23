@@ -2,10 +2,6 @@
   import Header from "../../components/Header.svelte";
 </script>
 
-<svelte:head>
-  <title>EDU-TECH BV | Client info</title>
-</svelte:head>
-
 <Header/>
 
 <main class="m-9">
@@ -33,7 +29,7 @@
     <div class="bg-white px-9 py-4 flex flex-col gap-6">
 
       <div>
-        <h3 class="font-bold">Phone number</h3>
+        <h3>Phone number</h3>
         <span>+32 471 87 25 91</span>
       </div>
       
@@ -66,7 +62,7 @@
 
     <div class="bg-white px-9 py-4">
       <p class="record">test</p>
-      <a class="px-4 py-0.5 bg-edutech-orange rounded-2xl" href={`/Licences/`}>View</a>  <!--style-->
+      <a class="px-4 py-0.5 bg-edutech-orange rounded-2xl" href={`/Licences/`}>View</a>
     </div>
 
 

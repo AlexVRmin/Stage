@@ -5,13 +5,13 @@ export async function load({ params }) {
 
   const pkschool = params.pkschool;
 
-  const { data } = await supabase
+  const { data: schoolData } = await supabase
     .from("School")
     .select("*")
     .eq("PKschool", pkschool)
     .single();
   
-  let school = data;
+  let school = schoolData;
 
   const { data: stadData } = await supabase
     .from("Stad")
@@ -30,61 +30,32 @@ export async function load({ params }) {
 
   school.Ondertekenaar = ondertekenaarData?.Naam;
 
-  const { data: AdminData } = await supabase
+  const { data: adminData } = await supabase
     .from("Persoon")
     .select("Naam, Voornaam, Email")
     .eq("PKpersoon", school.AdminFK)
     .single();
   
-  school.Admin = AdminData?.Naam;
-  school.Voornaam = AdminData?.Voornaam;
-  school.Email = AdminData?.Email;
+  school.Admin = adminData?.Naam;
+  school.Voornaam = adminData?.Voornaam;
+  school.Email = adminData?.Email;
 
-  const { data: SchoolgroepData } = await supabase
+  const { data: schoolgroepData } = await supabase
     .from("Schoolgroep")
     .select("Naam")
     .eq("PKschoolgroep", school.SchoolgroepFK)
     .single();
   
-  school.Schoolgroep = SchoolgroepData?.Naam;
+  school.Schoolgroep = schoolgroepData?.Naam;
 
   const { data: contractData } = await supabase
     .from("Contract")
-    .select("*, School(*)")
-    .eq("SchoolFK", school.PKschool)
-    .order('HoofdcontractFK', { ascending: false });
+    .select("*")
+    .eq("SchoolFK", school.PKschool);
 
+  school.Contract = contractData || [];
 
-  const { data: hoofdcontractData } = await supabase
-    .from("Hoofdcontract")
-    .select("*");
-    console.log('hoofdcontractData', hoofdcontractData);
-
-  // Make mapping of Hoofdcontracts by their PK.
-  let hoofdcontractLookup = {};
-  if (hoofdcontractData !== null) {
-    for (let hoofdcontract of hoofdcontractData) {
-      // @ts-ignore
-      hoofdcontractLookup[hoofdcontract.PKhoofdcontract] = hoofdcontract;
-    }
-  }
-
-  school.Contract = contractData;
-
-  // Loop through contracts, and remove second occurences of Hoofdcontract so we don't output the second occurence of Hoofdcontact title.
-  let HoofdcontractFK = null;
-  for (const contract of school.Contract) {
-    if (contract.HoofdcontractFK !== null) {
-      if (contract.HoofdcontractFK == HoofdcontractFK) {
-        contract.HoofdcontractFK = null;
-      } else {
-        HoofdcontractFK = contract.HoofdcontractFK;
-      }
-    }
-  }
-
-	return {
-		school: school,
-		hoofdcontractLookup: hoofdcontractLookup
-  }
+  return {
+    school: school
+  };
 }
