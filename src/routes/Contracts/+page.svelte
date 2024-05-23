@@ -65,7 +65,7 @@
       
       <div>
         <span>Total contracts:</span>
-        <span class="border-solid border-2x1 rounded-xl bg-edutech-orange px-2 py-0.5 text-white">8</span>
+        <span class="border-solid border-2x1 rounded-xl bg-edutech-orange px-2 py-0.5 text-white">{data.Count}</span>
       </div>
   
     </div>
