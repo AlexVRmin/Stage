@@ -6,6 +6,9 @@
   let contracten = writable([...data.Contract]);  
   let zoekterm = '';
 
+  // Datum vandaag
+  const vandaag = new Date();
+
   // Searchbar
   function zoekContracten() {
     const dataArray = get(writable([...data.Contract]));
@@ -84,7 +87,7 @@
 
   {#each $contracten as contract}
   <div class="record flex justify-between">
-    {#if contract.Startdatum > Date.now()}
+    {#if new Date(contract.Startdatum) <= vandaag && new Date(contract.Einddatum) >= vandaag}
       <span class="w-40">ACTIVE</span>
     {:else}
       <span class="w-40">INACTIVE</span>
@@ -98,4 +101,3 @@
   </div>
   {/each}
 </main>
-
