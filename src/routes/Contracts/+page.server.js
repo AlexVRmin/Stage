@@ -25,31 +25,37 @@ export async function load() {
   }
 
   for (const contract of data) {
-    const { data: aantallicentiesData } = await supabase
-      .from("Bestelregel")
-      .select("Aantal")
-      .eq("PKbestelregel", contract.BestelregelFK)
+    const { data: aantallicentiesData, error } = await supabase
+      .from("totaallicenties")
+      .select("sum, ContractFK")
+      .eq("ContractFK", contract.PKcontract)
       .single();
-   
-    contract.Aantal = aantallicentiesData?.Aantal;
+    
+    if (error) {
+      console.error('Error fetching total price:', error.message);
+      contract.Aantal = "0";
+    } else {
+      contract.Aantal = aantallicentiesData?.sum;
+    }
+
   }
 
   // Haal de totale prijs op uit de view 'jos'
   for (const contract of data) {
     const { data: totaalprijsData, error } = await supabase
-      .from("jos")
-      .select("sum, ContractFK") // Gebruik de juiste kolomnamen uit je view
+      .from("totaalprijs")
+      .select("sum, ContractFK")
       .eq("ContractFK", contract.PKcontract)
       .single();
-   
+    
     if (error) {
       console.error('Error fetching total price:', error.message);
-      contract.Prijs = "negeer aub";
+      contract.Prijs = "0";
     } else {
       contract.Prijs = totaalprijsData?.sum;
     }
   }
- 
+  
   return {
     Contract: data ?? [],
     Count: count ?? 0,
