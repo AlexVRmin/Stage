@@ -67,7 +67,6 @@
     const sortVolgorde = volgorde('Telefoon');
     // @ts-ignore
     sorteren('Telefoon', (a, b) => (a.Telefoon - b.Telefoon) * sortVolgorde);
-    alert('Wie sorteerd er nu op telefoon?');
   }
 
   function Email() {
