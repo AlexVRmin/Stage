@@ -12,12 +12,15 @@
 
   export let data;
   let licenties = data.licenties;
+
+  import Header from "../../../components/Header.svelte"; 
 </script>
 
 <svelte:head>
 	<title>EDU-TECH BV | Licenses</title>
 </svelte:head>
 
+<Header/>
 
 <main class="m-9 flex flex-col gap-2">
   {#each licenties as licentie}
