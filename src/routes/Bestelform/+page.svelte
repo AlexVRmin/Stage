@@ -1,15 +1,12 @@
 <script>
     import Header from "../../components/Header.svelte";
 
-
     export let data;
     let itemsLicenties = ['1'];
     let nextItem = 65;
     export let index;
+    let bestellingKlant = [];
     let visibleLicenties = [data.Licentie];
-
-    // export let licentieType;
-    // export let licentieAmount;
 
     export let formValues = {
         typeLicenties: {
@@ -25,6 +22,20 @@
         schoolGroup: '',
     }
 
+    function storeData() { 
+        localStorage.clear();
+        for (let index = 1; index < formValues.typeLicenties.type.length; index++) {
+                if (formValues.typeLicenties.type[index]) {
+                bestellingKlant.push(formValues.typeLicenties.type[index], formValues.typeLicenties.amount[index]);
+                localStorage.setItem("bestelling", JSON.stringify(bestellingKlant));
+            }
+            console.log(localStorage);
+        }       
+        bestellingKlant = [];
+
+        localStorage.setItem("gegevens", JSON.stringify([formValues.name, formValues.familyName, formValues.schoolName, formValues.street, formValues.houseNumber, formValues.mail, formValues.schoolGroup]));
+    }
+
     function fixArray(index) {
         // visibleLicenties[0].splice(index,1)
         let licenties = [];
@@ -35,6 +46,7 @@
 
     function addItem() {
         itemsLicenties = [...itemsLicenties, String.fromCharCode(nextItem++)];
+        storeData();
     }
 
     function removeItem(index) {
@@ -47,6 +59,8 @@
     }
 
 
+
+
 </script>
 
 <svelte:head>
@@ -55,8 +69,7 @@
 
 <Header/>
 
-
-<form class="m-1" action="./Email" method="post">
+<form class="m-1" action="./Email?/sendEmail" method="post">
 
     <section class="flex justify-between mt-20">
 
@@ -111,7 +124,7 @@
  
                 <input type="email" placeholder="E-mail" class="border border-black p-2 ml-4" name="Mail" bind:value={formValues.mail}>
 
-                <button class="border rounded p-2 ml-4 mt-40 bg-edutech-orange">Bestel</button>
+                <button class="border rounded p-2 ml-4 mt-40 bg-edutech-orange" on:click={() => storeData()}>Bestel</button>
             </div>
         </div>
 
